@@ -1,0 +1,22 @@
+- name: Consul | Create client configuration
+  template:
+    src: client-config.json.j2
+    dest: "/etc/consul.d/client/config.json"
+    owner: consul
+    group: consul
+    mode: 0644
+  when: "'consul-client' in group_names | default([])"
+
+- name: Consul | Create Systemd Client Service
+  template:
+    src: client.service.j2
+    dest: /etc/systemd/system/consul-client.service
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Consul | Start Client Service
+  systemd:
+    name: consul-client
+    state: started
+    enabled: yes
