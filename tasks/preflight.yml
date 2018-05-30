@@ -1,0 +1,34 @@
+- name: Consul | Install base packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - unzip
+    - curl
+
+- name: Consul | Fetch and extract Binary
+  unarchive:
+    src: https://releases.hashicorp.com/consul/1.1.0/consul_1.1.0_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+    owner: root
+    mode: 0755
+
+- name: Consul | Create service account
+  user:
+    name: consul
+    shell: /bin/bash
+    comment: Consul Service Account
+
+- name: Consul | Create directories
+  file:
+    path: "{{ item }}"
+    owner: consul
+    group: consul
+    mode: 0775
+    state: directory
+  with_items:
+    - /etc/consul.d
+    - /etc/consul.d/bootstrap
+    - /etc/consul.d/server
+    - /etc/consul.d/client
+    - /var/lib/consul.d

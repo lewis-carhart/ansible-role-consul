@@ -1,0 +1,8 @@
+consul:
+  global:
+    client_addr: 0.0.0.0
+    datacenter: example
+    log_level: INFO
+    data_dir: /var/lib/consul.d/
+  bootstrap:
+    expect: 3
